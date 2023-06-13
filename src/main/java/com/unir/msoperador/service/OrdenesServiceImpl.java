@@ -55,25 +55,34 @@ public class OrdenesServiceImpl implements OrdenesService{
 	public Orden createOrden(CreateOrdenRequest request) {
 
 		if (request != null) {
-			ResponseEntity<CreateProductoProveedorRequest> productoProveedorResponse = ppfacade.getProducto(request.getProductoProveedorId());
+			
+			//Se consulta con el ms-buscador el producto del proveedor seleccionado
+			ResponseEntity<CreateProductoProveedorRequest> productoProveedorResponse = ppfacade.getProducto(request.getProveedorId(), request.getProductoProveedorId());
 
 			if (productoProveedorResponse.getStatusCode().equals(HttpStatus.OK)) {
 
 				CreateProductoProveedorRequest productoProveedor = productoProveedorResponse.getBody();
 				
+				//Se verifica si la cantidad seleccionada es menor que la existente en inventario por el proveedor
 				if(productoProveedor.getCantidad() >= request.getCantidad()) {
 					Orden orden = Orden.builder().productoProveedorId(request.getProductoProveedorId()).proveedorId(request.getProveedorId())
 							.cantidad(request.getCantidad()).fecha(request.getFecha()).total(request.getTotal()).build();
 					
 					int nuevaCantidad = productoProveedor.getCantidad() - request.getCantidad();
-					ppfacade.updateProductoCantidad(request.getProductoProveedorId(), nuevaCantidad);
 					
-					ResponseEntity<CreateProductoRequest> productoResponse = pfacade.getProductoCodigo(productoProveedor.getCodigo());
+					//Se actualiza la cantidad del producto seleccionado en inventario
+					ppfacade.updateProductoCantidad(request.getProveedorId(), request.getProductoProveedorId(), nuevaCantidad);
+					
+					//Se verifica si existe algun producto con ese codigo
+					ResponseEntity<List<CreateProductoRequest>> productoResponse = pfacade.getProductoCodigo(productoProveedor.getCodigo());
 					
 					if (productoResponse.getStatusCode().equals(HttpStatus.OK)) {
-						CreateProductoRequest producto = productoResponse.getBody();
+						List<CreateProductoRequest> productos = productoResponse.getBody();
 						
-						if(producto != null) {
+						
+						//Si es existe,se actualiza el estado. De lo contrario, se crea el nuevo producto.
+						if(!productos.isEmpty()) {
+							CreateProductoRequest producto = productos.get(0);
 							nuevaCantidad = producto.getCantidad() + request.getCantidad();
 							pfacade.updateProductoCantidad(producto.getId(), nuevaCantidad);
 						}

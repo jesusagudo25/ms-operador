@@ -52,17 +52,21 @@ public class DistribucionesServiceImpl implements DistribucionesService{
 
 		if (request != null) {
 			
+			//Se consulta con el ms-buscador el producto seleccionado
 			ResponseEntity<CreateProductoRequest> productoResponse = facade.getProducto(request.getProductoId());
 
 			if (productoResponse.getStatusCode().equals(HttpStatus.OK)) {
 
 				CreateProductoRequest producto = productoResponse.getBody();
 				
+				//Se verifica si la cantidad seleccionada es menor que la existente en inventario
 				if(producto.getCantidad() >= request.getCantidad()) {
 					Distribucion distribucion = Distribucion.builder().sucursalId(request.getSucursalId()).productoId(request.getProductoId())
 							.cantidad(request.getCantidad()).fecha(request.getFecha()).build();
 					
 					int nuevaCantidad = producto.getCantidad() - request.getCantidad();
+					
+					//Se actualiza la cantidad del producto seleccionado en inventario
 					facade.updateProductoCantidad(request.getProductoId(), nuevaCantidad);
 					return repository.save(distribucion);
 				}

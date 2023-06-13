@@ -1,11 +1,14 @@
 package com.unir.msoperador.facade;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -35,7 +38,8 @@ public class ProductoFacade {
 	@Value("${unir.app.buscador.producto.create.url}")
 	private String createProductoUrl;
 	
-	public ResponseEntity<CreateProductoRequest> getProducto(long productoId) {
+	//Se utiliza para consultar un determinado producto en el ms-buscador
+	public ResponseEntity<CreateProductoRequest> getProducto(long productoId) {		
 		try {
 			return restTemplate.getForEntity(String.format(getProductoUrl, productoId), CreateProductoRequest.class);
 		} catch (HttpClientErrorException e) {
@@ -44,15 +48,19 @@ public class ProductoFacade {
 		}
 	}
 	
-	public ResponseEntity<CreateProductoRequest> getProductoCodigo(String codigo) {
+	//Se utiliza para consultar los productos en el ms-buscador por codigo
+	public ResponseEntity<List<CreateProductoRequest>> getProductoCodigo(String codigo) {		
 		try {
-			return restTemplate.getForEntity(String.format(getProductoCodigoUrl, codigo), CreateProductoRequest.class);
+			return restTemplate.exchange(String.format(getProductoCodigoUrl, codigo), HttpMethod.GET,
+	                null,
+	                new ParameterizedTypeReference<List<CreateProductoRequest>>() {});
 		} catch (HttpClientErrorException e) {
 			log.error("Client Error: {}, Product with CODE {}", e.getStatusCode(), codigo);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
+	//Se utiliza para actualizar la cantidad existente del producto en inventario
 	public ResponseEntity<CreateProductoRequest> updateProductoCantidad(long productoId, Integer nuevaCantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
@@ -72,6 +80,7 @@ public class ProductoFacade {
 		}
 	}
 	
+	//Se utiliza para crear un producto en inventario
 	public ResponseEntity<CreateProductoRequest> createProducto(String nombre, String codigo, Double precio, int cantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();

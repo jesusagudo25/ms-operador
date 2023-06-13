@@ -29,15 +29,13 @@ unir:
     buscador:
       producto:
         get:
-          url: http://localhost:8762/ms-buscador/productos/%s
+          url: http://ms-buscador/productos/%s
         update:
-          url: http://localhost:8762/ms-buscador/productos/%s/cantidad
+          url: http://ms-buscador/productos/%s
         codigo:
-          url: http://localhost:8762/ms-buscador/productos/%s/codigo 
+          url: http://ms-buscador/productos?codigo=%s
         create:
-          url: http://localhost:8762/ms-buscador/productos
+          url: http://ms-buscador/productos
       productoproveedor:
         get:
-          url: http://localhost:8762/ms-buscador/productos-proveedores/%s
-        update:
-          url: http://localhost:8762/ms-buscador/productos-proveedores/%s/cantidad
+          url: http://ms-buscador/proveedores/%s/productos/%s

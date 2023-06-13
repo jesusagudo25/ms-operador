@@ -27,19 +27,20 @@ public class ProductoProveedorFacade {
 	@Value("${unir.app.buscador.productoproveedor.get.url}")
 	private String getProductoUrl;
 	
-	@Value("${unir.app.buscador.productoproveedor.update.url}")
-	private String updateProductoUrl;
+	//Se utiliza para consultar un producto de un determinado proveedor en el ms-operador
 
-	public ResponseEntity<CreateProductoProveedorRequest> getProducto(long productoId) {
+	public ResponseEntity<CreateProductoProveedorRequest> getProducto(long proveedorId, long productoId) {
 		try {
-			return restTemplate.getForEntity(String.format(getProductoUrl, productoId), CreateProductoProveedorRequest.class);
+			return restTemplate.getForEntity(String.format(getProductoUrl, proveedorId, productoId), CreateProductoProveedorRequest.class);
 		} catch (HttpClientErrorException e) {
 			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
-	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(long productoId, Integer nuevaCantidad) {
+	//Se utiliza para actualizar la cantidad existente del producto -> proveedor
+	
+	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(long proveedorId, long productoId, Integer nuevaCantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -50,7 +51,7 @@ public class ProductoProveedorFacade {
 		    
 		    HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
 			
-			return restTemplate.exchange(String.format(updateProductoUrl, productoId), HttpMethod.PATCH, requestEntity, CreateProductoProveedorRequest.class );
+			return restTemplate.exchange(String.format(getProductoUrl, proveedorId, productoId), HttpMethod.PATCH, requestEntity, CreateProductoProveedorRequest.class );
 			
 		} catch (HttpClientErrorException e) {
 			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
