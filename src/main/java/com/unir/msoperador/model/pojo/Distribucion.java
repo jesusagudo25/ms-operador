@@ -34,7 +34,7 @@ public class Distribucion {
 	private Long sucursalId;
 	
 	@Column(name = "producto_id")
-	private Long productoId;
+	private String productoId;
 	
 	@Column(name = "cantidad")
 	private int cantidad;

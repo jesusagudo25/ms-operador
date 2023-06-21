@@ -29,9 +29,6 @@ public class ProductoFacade {
 	@Value("${unir.app.buscador.producto.get.url}")
 	private String getProductoUrl;
 	
-	@Value("${unir.app.buscador.producto.codigo.url}")
-	private String getProductoCodigoUrl;
-	
 	@Value("${unir.app.buscador.producto.update.url}")
 	private String updateProductoUrl;
 	
@@ -39,29 +36,17 @@ public class ProductoFacade {
 	private String createProductoUrl;
 	
 	//Se utiliza para consultar un determinado producto en el ms-buscador
-	public ResponseEntity<CreateProductoRequest> getProducto(long productoId) {		
+	public ResponseEntity<CreateProductoRequest> getProducto(String productoCodigo) {		
 		try {
-			return restTemplate.getForEntity(String.format(getProductoUrl, productoId), CreateProductoRequest.class);
+			return restTemplate.getForEntity(String.format(getProductoUrl, productoCodigo), CreateProductoRequest.class);
 		} catch (HttpClientErrorException e) {
-			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
-			return ResponseEntity.badRequest().build();
-		}
-	}
-	
-	//Se utiliza para consultar los productos en el ms-buscador por codigo
-	public ResponseEntity<List<CreateProductoRequest>> getProductoCodigo(String codigo) {		
-		try {
-			return restTemplate.exchange(String.format(getProductoCodigoUrl, codigo), HttpMethod.GET,
-	                null,
-	                new ParameterizedTypeReference<List<CreateProductoRequest>>() {});
-		} catch (HttpClientErrorException e) {
-			log.error("Client Error: {}, Product with CODE {}", e.getStatusCode(), codigo);
+			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoCodigo);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
 	//Se utiliza para actualizar la cantidad existente del producto en inventario
-	public ResponseEntity<CreateProductoRequest> updateProductoCantidad(long productoId, Integer nuevaCantidad) {
+	public ResponseEntity<CreateProductoRequest> updateProductoCantidad(String productoCodigo, Integer nuevaCantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -72,10 +57,10 @@ public class ProductoFacade {
 		    
 		    HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
 			
-			return restTemplate.exchange(String.format(updateProductoUrl, productoId), HttpMethod.PATCH, requestEntity, CreateProductoRequest.class );
+			return restTemplate.exchange(String.format(updateProductoUrl, productoCodigo), HttpMethod.PATCH, requestEntity, CreateProductoRequest.class );
 			
 		} catch (HttpClientErrorException e) {
-			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
+			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoCodigo);
 			return ResponseEntity.badRequest().build();
 		}
 	}

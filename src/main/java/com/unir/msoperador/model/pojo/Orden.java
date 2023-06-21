@@ -31,7 +31,7 @@ public class Orden {
 	private Long id;
 	
 	@Column(name = "productoproveedor_id")
-	private Long productoProveedorId;
+	private String productoProveedorId;
 	
 	@Column(name = "proveedor_id")
 	private Long proveedorId;

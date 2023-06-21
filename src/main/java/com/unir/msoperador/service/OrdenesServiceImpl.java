@@ -74,17 +74,16 @@ public class OrdenesServiceImpl implements OrdenesService{
 					ppfacade.updateProductoCantidad(request.getProveedorId(), request.getProductoProveedorId(), nuevaCantidad);
 					
 					//Se verifica si existe algun producto con ese codigo
-					ResponseEntity<List<CreateProductoRequest>> productoResponse = pfacade.getProductoCodigo(productoProveedor.getCodigo());
+					ResponseEntity<CreateProductoRequest> productoResponse = pfacade.getProducto(request.getProductoProveedorId());
 					
 					if (productoResponse.getStatusCode().equals(HttpStatus.OK)) {
-						List<CreateProductoRequest> productos = productoResponse.getBody();
+						CreateProductoRequest producto = productoResponse.getBody();
 						
 						
 						//Si es existe,se actualiza el estado. De lo contrario, se crea el nuevo producto.
-						if(!productos.isEmpty()) {
-							CreateProductoRequest producto = productos.get(0);
+						if(producto != null) {
 							nuevaCantidad = producto.getCantidad() + request.getCantidad();
-							pfacade.updateProductoCantidad(producto.getId(), nuevaCantidad);
+							pfacade.updateProductoCantidad(producto.getCodigo(), nuevaCantidad);
 						}
 						else {
 							pfacade.createProducto(productoProveedor.getNombre(), productoProveedor.getCodigo(), productoProveedor.getPrecio(), request.getCantidad());

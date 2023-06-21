@@ -29,18 +29,18 @@ public class ProductoProveedorFacade {
 	
 	//Se utiliza para consultar un producto de un determinado proveedor en el ms-operador
 
-	public ResponseEntity<CreateProductoProveedorRequest> getProducto(long proveedorId, long productoId) {
+	public ResponseEntity<CreateProductoProveedorRequest> getProducto(long proveedorId, String productoCodigo) {
 		try {
-			return restTemplate.getForEntity(String.format(getProductoUrl, proveedorId, productoId), CreateProductoProveedorRequest.class);
+			return restTemplate.getForEntity(String.format(getProductoUrl, proveedorId, productoCodigo), CreateProductoProveedorRequest.class);
 		} catch (HttpClientErrorException e) {
-			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
+			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoCodigo);
 			return ResponseEntity.badRequest().build();
 		}
 	}
 	
 	//Se utiliza para actualizar la cantidad existente del producto -> proveedor
 	
-	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(long proveedorId, long productoId, Integer nuevaCantidad) {
+	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(long proveedorId, String productoCodigo, Integer nuevaCantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);
@@ -51,10 +51,10 @@ public class ProductoProveedorFacade {
 		    
 		    HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
 			
-			return restTemplate.exchange(String.format(getProductoUrl, proveedorId, productoId), HttpMethod.PATCH, requestEntity, CreateProductoProveedorRequest.class );
+			return restTemplate.exchange(String.format(getProductoUrl, proveedorId, productoCodigo), HttpMethod.PATCH, requestEntity, CreateProductoProveedorRequest.class );
 			
 		} catch (HttpClientErrorException e) {
-			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoId);
+			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoCodigo);
 			return ResponseEntity.badRequest().build();
 		}
 	}
