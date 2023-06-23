@@ -29,9 +29,6 @@ public class ProductoFacade {
 	@Value("${unir.app.buscador.producto.get.url}")
 	private String getProductoUrl;
 	
-	@Value("${unir.app.buscador.producto.update.url}")
-	private String updateProductoUrl;
-	
 	@Value("${unir.app.buscador.producto.create.url}")
 	private String createProductoUrl;
 	
@@ -57,7 +54,7 @@ public class ProductoFacade {
 		    
 		    HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.toString(), headers);
 			
-			return restTemplate.exchange(String.format(updateProductoUrl, productoCodigo), HttpMethod.PATCH, requestEntity, CreateProductoRequest.class );
+			return restTemplate.exchange(String.format(getProductoUrl, productoCodigo), HttpMethod.PATCH, requestEntity, CreateProductoRequest.class );
 			
 		} catch (HttpClientErrorException e) {
 			log.error("Client Error: {}, Product with ID {}", e.getStatusCode(), productoCodigo);

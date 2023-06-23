@@ -81,13 +81,11 @@ public class OrdenesServiceImpl implements OrdenesService{
 						
 						
 						//Si es existe,se actualiza el estado. De lo contrario, se crea el nuevo producto.
-						if(producto != null) {
-							nuevaCantidad = producto.getCantidad() + request.getCantidad();
-							pfacade.updateProductoCantidad(producto.getCodigo(), nuevaCantidad);
-						}
-						else {
-							pfacade.createProducto(productoProveedor.getNombre(), productoProveedor.getCodigo(), productoProveedor.getPrecio(), request.getCantidad());
-						}
+						nuevaCantidad = producto.getCantidad() + request.getCantidad();
+						pfacade.updateProductoCantidad(producto.getCodigo(), nuevaCantidad);
+					}
+					else {
+						pfacade.createProducto(productoProveedor.getNombre(), productoProveedor.getCodigo(), productoProveedor.getPrecio(), request.getCantidad());
 					}
 					
 					return repository.save(orden);

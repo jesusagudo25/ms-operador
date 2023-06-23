@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateProductoRequest {
-	private Long id;
+	private String id;
 	private String nombre;
 	private String codigo;
 	private Double precio;

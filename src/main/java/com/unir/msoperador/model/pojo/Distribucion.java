@@ -18,7 +18,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "distribucion")
+@Table(name = "distribuciones")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -31,7 +31,7 @@ public class Distribucion {
 	private Long id;
 	
 	@Column(name = "sucursal_id")
-	private Long sucursalId;
+	private String sucursalId;
 	
 	@Column(name = "producto_id")
 	private String productoId;

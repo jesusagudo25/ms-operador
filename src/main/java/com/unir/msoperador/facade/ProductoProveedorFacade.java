@@ -29,7 +29,7 @@ public class ProductoProveedorFacade {
 	
 	//Se utiliza para consultar un producto de un determinado proveedor en el ms-operador
 
-	public ResponseEntity<CreateProductoProveedorRequest> getProducto(long proveedorId, String productoCodigo) {
+	public ResponseEntity<CreateProductoProveedorRequest> getProducto(String proveedorId, String productoCodigo) {
 		try {
 			return restTemplate.getForEntity(String.format(getProductoUrl, proveedorId, productoCodigo), CreateProductoProveedorRequest.class);
 		} catch (HttpClientErrorException e) {
@@ -40,7 +40,7 @@ public class ProductoProveedorFacade {
 	
 	//Se utiliza para actualizar la cantidad existente del producto -> proveedor
 	
-	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(long proveedorId, String productoCodigo, Integer nuevaCantidad) {
+	public ResponseEntity<CreateProductoProveedorRequest> updateProductoCantidad(String proveedorId, String productoCodigo, Integer nuevaCantidad) {
 		try {
 			HttpHeaders headers = new HttpHeaders();
 			headers.setContentType(MediaType.APPLICATION_JSON);

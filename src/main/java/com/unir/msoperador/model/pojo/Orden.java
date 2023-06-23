@@ -18,7 +18,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "orden")
+@Table(name = "ordenes")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -34,7 +34,7 @@ public class Orden {
 	private String productoProveedorId;
 	
 	@Column(name = "proveedor_id")
-	private Long proveedorId;
+	private String proveedorId;
 	
 	@Column(name = "cantidad")
 	private int cantidad;

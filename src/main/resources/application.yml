@@ -1,10 +1,10 @@
 # mysql
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/ms-operador
-    username: root
-    password:
+    driver-class-name: ${DB_DRIVER:com.mysql.cj.jdbc.Driver}
+    url: ${DB_URL:jdbc:mysql://localhost:3306/ms-operador}
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:}
   jpa:
     hibernate.ddl-auto: update
     show-sql: true
@@ -17,25 +17,26 @@ server:
   
 ## Configuracion del cliente de Eureka
 eureka:
+  instance:
+    preferIpAddress: false
+    hostname: ${HOSTNAME:ms-operador}
+    non-secure-port-enabled: false
+    secure-port-enabled: true
+    non-secure-port: 80
+    secure-port: 443
+    
   client:
     service-url:
       defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
-  instance:
-    preferIpAddress: true
-    hostname: ms-operador
 
 unir:
   app:
     buscador:
       producto:
         get:
-          url: http://ms-buscador/productos/%s
-        update:
-          url: http://ms-buscador/productos/%s
-        codigo:
-          url: http://ms-buscador/productos?codigo=%s
+          url: ${PRODUCTO_URL_GET:http://ms-buscador/productos/%s}
         create:
-          url: http://ms-buscador/productos
+          url: ${PRODUCTO_URL_CREATE:http://ms-buscador/productos}
       productoproveedor:
         get:
-          url: http://ms-buscador/proveedores/%s/productos/%s
+          url: ${PPROVEEDOR_URL_CREATE:http://ms-buscador/proveedores/%s/productos/%s}

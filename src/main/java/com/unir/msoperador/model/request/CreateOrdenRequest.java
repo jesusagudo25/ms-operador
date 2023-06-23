@@ -13,7 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class CreateOrdenRequest {
 	private String productoProveedorId;
-	private Long proveedorId;
+	private String proveedorId;
 	private int cantidad;
 	private Date fecha;
 	private Double total;
